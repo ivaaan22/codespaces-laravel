@@ -12,7 +12,7 @@ class MovieController extends Controller
     public function index($series_id)
     {
         $movies = Movie::where('series_id', $series_id)->get();
-        return response()->json(['movies' => $movies], 200);
+        return response()->json($movies, 200);
     }
 
     // Crear una película dentro de una serie
@@ -48,9 +48,18 @@ class MovieController extends Controller
     // Actualizar una película
     public function update(Request $request, $series_id, $movie_id)
     {
-        $movie = Movie::where('series_id', $series_id)->findOrFail($movie_id);
+        $validator = Validator::make($request->all(), [
+            'title' => 'sometimes|required|max:255',
+            'duration' => 'sometimes|required|integer|min:1',
+            'release_year' => 'sometimes|required|integer|min:1900|max:2100'
+        ]);
 
-        $movie->update($request->all());
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $movie = Movie::where('series_id', $series_id)->findOrFail($movie_id);
+        $movie->update($validator->validated());
 
         return response()->json($movie);
     }
@@ -58,7 +67,9 @@ class MovieController extends Controller
     // Eliminar una película
     public function destroy($series_id, $movie_id)
     {
-        Movie::where('series_id', $series_id)->findOrFail($movie_id)->delete();
+        $movie = Movie::where('series_id', $series_id)->findOrFail($movie_id);
+        $movie->delete();
+
         return response()->json(['message' => 'Película eliminada']);
     }
 }
