@@ -6,6 +6,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\AuthController;
+use App\Http\Middleware\IsUserAuth;
 
 Route::get('/students', [StudentController::class, 'index']);
 Route::post('/students', [StudentController::class, 'store']);
@@ -26,8 +27,16 @@ Route::get('/series/{series_id}/movies/{movie_id}', [MovieController::class, 'sh
 Route::put('/series/{series_id}/movies/{movie_id}', [MovieController::class, 'update']);
 Route::delete('/series/{series_id}/movies/{movie_id}', [MovieController::class, 'destroy']);
 
+//Estas son publicas, entran todos sin token
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::get('profile', [AuthController::class, 'getUser']);
+
+//Se vienen las PROTECTED ROUTES
+Route::middleware([IsUserAuth::class])->group(function () {
+    Route::get('profile', [AuthController::class, 'getUser']);
+    Route::post('logout', [AuthController::class, 'logout']);
+});
 
 
 
