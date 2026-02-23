@@ -26,7 +26,8 @@ Route::get('/series/{series_id}/movies/{movie_id}', [MovieController::class, 'sh
 Route::put('/series/{series_id}/movies/{movie_id}', [MovieController::class, 'update']);
 Route::delete('/series/{series_id}/movies/{movie_id}', [MovieController::class, 'destroy']);
 
-Route::post('/register', [AuthController::class, 'register']);
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
 
 
 
