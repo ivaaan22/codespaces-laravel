@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\AuthController;
 
 Route::get('/students', [StudentController::class, 'index']);
 Route::post('/students', [StudentController::class, 'store']);
@@ -24,6 +25,8 @@ Route::post('/series/{series_id}/movies', [MovieController::class, 'store']);
 Route::get('/series/{series_id}/movies/{movie_id}', [MovieController::class, 'show']);
 Route::put('/series/{series_id}/movies/{movie_id}', [MovieController::class, 'update']);
 Route::delete('/series/{series_id}/movies/{movie_id}', [MovieController::class, 'destroy']);
+
+Route::post('/register', [AuthController::class, 'register']);
 
 
 

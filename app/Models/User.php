@@ -22,7 +22,7 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
-        'role'
+        'role',
     ];
 
     /**
@@ -44,7 +44,17 @@ class User extends Authenticatable implements JWTSubject
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims(): array
+    {
+        return [];
     }
 }
